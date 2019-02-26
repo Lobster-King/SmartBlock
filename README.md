@@ -13,21 +13,20 @@
 
 ```bash
 /*注册*/
-$ __weak typeof(self)weakSelf = self;
+__weak typeof(self)weakSelf = self;
     [self observeCallBackUsingKey:@"touchCallBack" callBack:^(NSString *msg) {
         NSLog(@"%s",__func__);
         weakSelf.view.backgroundColor = [UIColor orangeColor];
     } destructionOption:BlockDestructionDefault];
 /*发送*/
- [self callBackUsingKey:@"touchCallBack",@"msg",nil];
+[self callBackUsingKey:@"touchCallBack",@"msg",nil];
 ```
 
 ### Block执行线程和注册线程一致
 
 ```bash
 /*注册*/
-$    [NSThread detachNewThreadSelector:@selector(addObserber) toTarget:self withObject:nil];
-    
+[NSThread detachNewThreadSelector:@selector(addObserber) toTarget:self withObject:nil];
 
 - (void)addObserber {
     NSLog(@"注册block线程：%@",[NSThread currentThread]);
@@ -40,7 +39,7 @@ $    [NSThread detachNewThreadSelector:@selector(addObserber) toTarget:self with
     } destructionOption:BlockDestructionDefault blockRunModeOption:BlockRunModeOnObserverThread];
 }
 /*发送*/
- [self callBackUsingKey:@"touchCallBack",@"msg",nil];
+[self callBackUsingKey:@"touchCallBack",@"msg",nil];
 ```
  
 ## 注意事项：
