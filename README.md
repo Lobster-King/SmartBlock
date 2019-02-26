@@ -1,5 +1,9 @@
 # SmartBlock
 
+## Demo
+
+![Demo gif](https://github.com/Lobster-King/SmartBlock/blob/master/SmartDemo.gif)
+
 ## 使用场景：
 * 跨多个界面回调，例如：ViewA -> ViewB -> ViewC 点击ViewC 回调给ViewA或者ViewA所在的controller。（解决多级回调等繁琐问题）
 * 轻量级的通知模式替代方案。
