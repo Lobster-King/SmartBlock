@@ -5,9 +5,9 @@
 * 轻量级的通知模式解决方案。
  
 ## 使用方式：
- 1.引入该分类头文件。
- 2.调用observeCallBackUsingKey方法，传入key和callBack block。
- 3.在需要处理回调的地方调用callBackUsingKey方法，传入key。
+* 引入该分类头文件。
+* 调用observeCallBackUsingKey方法，传入key和callBack block。
+* 在需要处理回调的地方调用callBackUsingKey方法，传入key。
 
 ### 跨界面传值
 
