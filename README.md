@@ -57,3 +57,10 @@ __weak typeof(self)weakSelf = self;
 * 宿主对象清理策略。
 * 性能优化。
 
+# Have a problem?
+
+You can contact me in the following ways
+
+* PRs or Issues.
+* Email :[zhiwei.geek@gmail.com](mailto:zhiwei.geek@gmail.com)
+
