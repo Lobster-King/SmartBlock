@@ -21,6 +21,27 @@ $ __weak typeof(self)weakSelf = self;
 /*发送*/
  [self callBackUsingKey:@"touchCallBack",@"msg",nil];
 ```
+
+### Block执行线程和注册线程一致
+
+```bash
+/*注册*/
+$    [NSThread detachNewThreadSelector:@selector(addObserber) toTarget:self withObject:nil];
+    
+
+- (void)addObserber {
+    NSLog(@"注册block线程：%@",[NSThread currentThread]);
+    __weak typeof(self)weakSelf = self;
+    [self observeCallBackUsingKey:@"touchCallBack" callBack:^(NSString *msg) {
+        NSLog(@"block执行线程：%@",[NSThread currentThread]);
+        dispatch_async(dispatch_get_main_queue(), ^{
+           weakSelf.view.backgroundColor = [UIColor orangeColor];
+        });
+    } destructionOption:BlockDestructionDefault blockRunModeOption:BlockRunModeOnObserverThread];
+}
+/*发送*/
+ [self callBackUsingKey:@"touchCallBack",@"msg",nil];
+```
  
 ## 注意事项：
  1.提供BlockDestructionDefault和BlockDestructionBlockInvoked两种模式。
