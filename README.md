@@ -8,6 +8,19 @@
  1.引入该分类头文件。
  2.调用observeCallBackUsingKey方法，传入key和callBack block。
  3.在需要处理回调的地方调用callBackUsingKey方法，传入key。
+
+### 跨界面传值
+
+```bash
+/*注册*/
+$ __weak typeof(self)weakSelf = self;
+    [self observeCallBackUsingKey:@"touchCallBack" callBack:^(NSString *msg) {
+        NSLog(@"%s",__func__);
+        weakSelf.view.backgroundColor = [UIColor orangeColor];
+    } destructionOption:BlockDestructionDefault];
+/*发送*/
+ [self callBackUsingKey:@"touchCallBack",@"msg",nil];
+```
  
 ## 注意事项：
  1.提供BlockDestructionDefault和BlockDestructionBlockInvoked两种模式。
