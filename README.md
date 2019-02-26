@@ -43,17 +43,17 @@ __weak typeof(self)weakSelf = self;
 ```
  
 ## 注意事项：
-* 1.提供BlockDestructionDefault和BlockDestructionBlockInvoked两种模式。
-* 2.block入参个数与调用时的参数个数确保一致，否则会丢弃block的执行。
-* 3.谨慎使用option BlockDestructionBlockInvoked
+* 提供BlockDestructionDefault和BlockDestructionBlockInvoked两种模式。
+* block入参个数与调用时的参数个数确保一致，否则会丢弃block的执行。
+* 谨慎使用option BlockDestructionBlockInvoked
  
 ## 与通知对比：
- 1.使用通知忘记dealloc移除观察者在iOS9之前会出现崩溃。
- 2.发送通知和接收通知的处理是同步的。
- 3.如果要实现发送通知和接收通知在不同线程，系统原生通知实现比较复杂。
+* 使用通知忘记dealloc移除观察者在iOS9之前会出现崩溃。
+* 发送通知和接收通知的处理是同步的。
+* 如果要实现发送通知和接收通知在不同线程，系统原生通知实现比较复杂。
  
 ## TODO List:
- 1.多线程安全问题。
- 2.宿主对象清理策略。
- 3.性能优化。
+* 多线程安全问题。
+* 宿主对象清理策略。
+* 性能优化。
 
