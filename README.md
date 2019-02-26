@@ -1,8 +1,8 @@
 # SmartBlock
 
 ## 使用场景：
- 1.跨多个界面回调，例如：ViewA -> ViewB -> ViewC 点击ViewC 回调给ViewA或者ViewA所在的controller。（解决多级回调等繁琐问题）
- 2.轻量级的通知模式解决方案。
+* 跨多个界面回调，例如：ViewA -> ViewB -> ViewC 点击ViewC 回调给ViewA或者ViewA所在的controller。（解决多级回调等繁琐问题）
+* 轻量级的通知模式解决方案。
  
 ## 使用方式：
  1.引入该分类头文件。
