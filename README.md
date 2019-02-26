@@ -43,9 +43,9 @@ __weak typeof(self)weakSelf = self;
 ```
  
 ## 注意事项：
- 1.提供BlockDestructionDefault和BlockDestructionBlockInvoked两种模式。
- 2.block入参个数与调用时的参数个数确保一致，否则会丢弃block的执行。
- 3.谨慎使用option BlockDestructionBlockInvoked
+* 1.提供BlockDestructionDefault和BlockDestructionBlockInvoked两种模式。
+* 2.block入参个数与调用时的参数个数确保一致，否则会丢弃block的执行。
+* 3.谨慎使用option BlockDestructionBlockInvoked
  
 ## 与通知对比：
  1.使用通知忘记dealloc移除观察者在iOS9之前会出现崩溃。
