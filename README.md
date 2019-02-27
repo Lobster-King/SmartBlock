@@ -30,9 +30,9 @@ __weak typeof(self)weakSelf = self;
 
 ```bash
 /*注册*/
-[NSThread detachNewThreadSelector:@selector(addObserber) toTarget:self withObject:nil];
+[NSThread detachNewThreadSelector:@selector(addObserver) toTarget:self withObject:nil];
 
-- (void)addObserber {
+- (void)addObserver {
     NSLog(@"注册block线程：%@",[NSThread currentThread]);
     __weak typeof(self)weakSelf = self;
     [self observeCallBackUsingKey:@"touchCallBack" callBack:^(NSString *msg) {
