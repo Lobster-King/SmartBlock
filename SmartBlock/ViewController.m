@@ -31,13 +31,13 @@
 //        weakSelf.view.backgroundColor = [UIColor orangeColor];
 //    } destructionOption:BlockDestructionDefault];
 //
-    [NSThread detachNewThreadSelector:@selector(addObserber) toTarget:self withObject:nil];
+    [NSThread detachNewThreadSelector:@selector(addObserver) toTarget:self withObject:nil];
     
     // Do any additional setup after loading the view, typically from a nib.
     
 }
 
-- (void)addObserber {
+- (void)addObserver {
     NSLog(@"注册block线程：%@",[NSThread currentThread]);
     __weak typeof(self)weakSelf = self;
     [self observeCallBackUsingKey:@"touchCallBack" callBack:^(NSString *msg) {
