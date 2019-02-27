@@ -52,10 +52,11 @@ __weak typeof(self)weakSelf = self;
 * 谨慎使用option BlockDestructionBlockInvoked
  
 ## 与通知对比：
-* 使用通知忘记dealloc移除观察者在iOS9之前会出现崩溃。
+* 使用通知忘记dealloc移除观察者在iOS9之前因为__unsafed_unretained会出现野指针崩溃。
 * 发送通知和接收通知的处理是同步的。
 * 如果要实现发送通知和接收通知在不同线程，系统原生通知实现比较复杂。
- 
+* 系统原生通知不支持传不定参数，不够灵活。
+
 ## TODO List:
 * 多线程安全问题。
 * 宿主对象清理策略。
