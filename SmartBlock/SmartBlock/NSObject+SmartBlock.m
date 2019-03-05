@@ -74,12 +74,11 @@ static const char *__BlockSignature__(id blockRef)
     return (const char*)(descriptor->rest[offset]);
 }
 
-static NSObject *hostObj            = nil;
-static NSString *globalBlockMapKey  = @"globalBlockRef";
-static BOOL     initialized         = NO;
-static NSMutableArray *argumentsRef = nil;
-static NSMutableArray *destructionDefaultArray = nil;
-static NSMutableArray *destructionInvokedArray = nil;
+static BOOL     initialized                     = NO;
+static NSMutableDictionary *globalMap           = nil;
+static NSMutableArray *argumentsRef             = nil;
+static NSMutableArray *destructionDefaultArray  = nil;
+static NSMutableArray *destructionInvokedArray  = nil;
 
 @implementation NSObject (SmartBlock)
 
@@ -96,13 +95,10 @@ static NSMutableArray *destructionInvokedArray = nil;
     NSParameterAssert(block);
     
     if (!initialized) {
-        hostObj = [[NSObject alloc]init];
-        NSMutableDictionary *globalMap = [NSMutableDictionary new];
-        [self setGlobalBlockRef:globalMap];
+        globalMap = [NSMutableDictionary new];
         initialized = YES;
     }
     
-    NSMutableDictionary *globalMap = [self globalBlockRef];
     NSMutableArray *blocks = [globalMap objectForKey:key];
     if (!blocks) {
         blocks = [NSMutableArray array];
@@ -151,7 +147,6 @@ static NSMutableArray *destructionInvokedArray = nil;
 
 - (void)invokeBlockUsingKey:(NSString *)key arguments:(NSMutableArray *)args {
     argumentsRef = args;
-    NSMutableDictionary *globalMap = [self globalBlockRef];
     NSMutableArray *blocks = [globalMap objectForKey:key];
     destructionDefaultArray = [NSMutableArray array];
     destructionInvokedArray = [NSMutableArray array];
@@ -331,16 +326,6 @@ static NSMutableArray *destructionInvokedArray = nil;
 
 - (void)disposeBlockInfos:(NSMutableArray *)blocks{
     [blocks removeObjectsInArray:destructionInvokedArray];
-}
-
-- (void)setGlobalBlockRef:(NSMutableDictionary <NSString*,NSMutableArray*>*)globalBlockRef {
-    if (globalBlockRef) {
-        objc_setAssociatedObject(hostObj, &globalBlockMapKey, globalBlockRef, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-}
-
-- (NSMutableDictionary *)globalBlockRef {
-    return objc_getAssociatedObject(hostObj, &globalBlockMapKey);
 }
 
 @end
