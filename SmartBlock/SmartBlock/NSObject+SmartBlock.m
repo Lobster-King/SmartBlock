@@ -11,6 +11,7 @@
 
 static NSString *kBlockDefaultKey = @"kBlockDefaultKey";
 
+#pragma mark--BlockInfo（存储回调等信息）
 @interface BlockInfo : NSObject
 
 @property (nonatomic, copy) NSString *key;
@@ -74,13 +75,14 @@ static const char *__BlockSignature__(id blockRef)
         offset += 2;
     return (const char*)(descriptor->rest[offset]);
 }
-static NSString *associatedObjectKey            = @"smartBlockKey";
+
+static NSString *kAssociatedObjectKey           = @"smartBlockKey";
 static BOOL     initialized                     = NO;
 static NSMutableDictionary *globalMap           = nil;
 static NSMutableArray *argumentsRef             = nil;
-static NSMutableArray *destructionDefaultArray  = nil;
 static NSMutableArray *destructionInvokedArray  = nil;
 
+#pragma mark--宿主对象观察者（宿主对象释放后，在观察者dealloc方法中把block清理掉）
 @interface ObserverWatcher : NSObject
 
 @property (nonatomic, copy) NSString *hostAddress;
@@ -130,11 +132,11 @@ static NSMutableArray *destructionInvokedArray  = nil;
     
     NSString *address = [NSString stringWithFormat:@"%p",self];
     
-    id associatedObj = objc_getAssociatedObject(self, &associatedObjectKey);
+    id associatedObj = objc_getAssociatedObject(self, &kAssociatedObjectKey);
     if (!associatedObj) {
         ObserverWatcher *watcher = [ObserverWatcher new];
         watcher.hostAddress = address;
-        objc_setAssociatedObject(self, &associatedObjectKey, watcher, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, &kAssociatedObjectKey, watcher, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     
     NSMutableArray *blocks = [globalMap objectForKey:key];
@@ -186,7 +188,6 @@ static NSMutableArray *destructionInvokedArray  = nil;
 - (void)invokeBlockUsingKey:(NSString *)key arguments:(NSMutableArray *)args {
     argumentsRef = args;
     NSMutableArray *blocks = [globalMap objectForKey:key];
-    destructionDefaultArray = [NSMutableArray array];
     destructionInvokedArray = [NSMutableArray array];
     
     for (id block in blocks) {
@@ -199,9 +200,7 @@ static NSMutableArray *destructionInvokedArray  = nil;
             [self performSelector:@selector(invokeBlockOnObserverThreadWithInfo:) onThread:info.blockThread withObject:info waitUntilDone:NO];
         }
         
-        if (info.option == BlockDestructionDefault) {
-            [destructionDefaultArray addObject:info];
-        } else if (info.option == BlockDestructionBlockInvoked) {
+        if (info.option == BlockDestructionBlockInvoked) {
             [destructionInvokedArray addObject:info];
         }
     }
