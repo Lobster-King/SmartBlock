@@ -24,6 +24,10 @@
     SecondView *view = [[SecondView alloc]initWithFrame:CGRectMake(0, 0, 200, 200)];
     view.center = self.center;
     [self addSubview:view];
+    
+    [self observeCallBackUsingKey:@"touchCallBack" callBack:^(){
+        
+    }];
 }
 
 - (void)dealloc {

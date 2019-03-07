@@ -25,6 +25,14 @@
     self.baseView.center = self.view.center;
     [self.view addSubview:self.baseView];
     
+    [self.baseView removeFromSuperview];
+    self.baseView = nil;
+    
+    NSString *address = [NSString stringWithFormat:@"%p",self.baseView];
+    NSString *retrievedObject;
+    sscanf([address cStringUsingEncoding:NSUTF8StringEncoding], "%p", &retrievedObject);
+    
+    
 //    __weak typeof(self)weakSelf = self;
 //    [self observeCallBackUsingKey:@"touchCallBack" callBack:^(NSString *msg) {
 //        NSLog(@"%s",__func__);
@@ -32,7 +40,7 @@
 //    } destructionOption:BlockDestructionDefault];
 //
     [NSThread detachNewThreadSelector:@selector(addObserver) toTarget:self withObject:nil];
-    
+    NSLog(@"子线程中注册Block");
     // Do any additional setup after loading the view, typically from a nib.
     
 }
@@ -46,7 +54,7 @@
            weakSelf.view.backgroundColor = [UIColor orangeColor];
         });
     } destructionOption:BlockDestructionDefault blockRunModeOption:BlockRunModeOnObserverThread];
-
+    NSLog(@"阻塞当前线程");
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {

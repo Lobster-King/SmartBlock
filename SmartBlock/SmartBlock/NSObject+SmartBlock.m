@@ -14,6 +14,7 @@ static NSString *kBlockDefaultKey = @"kBlockDefaultKey";
 @interface BlockInfo : NSObject
 
 @property (nonatomic, copy) NSString *key;
+@property (nonatomic, copy) NSString *address;
 @property (nonatomic, copy) id block;
 @property (nonatomic, assign) BlockDestructionOption option;
 @property (nonatomic, strong) NSThread *blockThread;
@@ -73,12 +74,40 @@ static const char *__BlockSignature__(id blockRef)
         offset += 2;
     return (const char*)(descriptor->rest[offset]);
 }
-
+static NSString *associatedObjectKey            = @"smartBlockKey";
 static BOOL     initialized                     = NO;
 static NSMutableDictionary *globalMap           = nil;
 static NSMutableArray *argumentsRef             = nil;
 static NSMutableArray *destructionDefaultArray  = nil;
 static NSMutableArray *destructionInvokedArray  = nil;
+
+@interface ObserverWatcher : NSObject
+
+@property (nonatomic, copy) NSString *hostAddress;
+
+@end
+
+@implementation ObserverWatcher
+
+- (void)dealloc {
+    /*当前宿主对象释放之后，其关联对象随之被清理，在此方法内把全局的Block清理掉*/
+    [self destroyBlocks];
+}
+
+- (void)destroyBlocks {
+#warning 需要考虑多线程问题
+    for (NSMutableArray *observers in [globalMap allValues]) {
+        NSMutableArray *blocksTemp = [NSMutableArray array];
+        for (BlockInfo *blockInfo in observers) {
+            if ([blockInfo.address isEqualToString:self.hostAddress]) {
+                [blocksTemp addObject:blockInfo];
+            }
+        }
+        [observers removeObjectsInArray:blocksTemp];
+    }
+}
+
+@end
 
 @implementation NSObject (SmartBlock)
 
@@ -99,13 +128,22 @@ static NSMutableArray *destructionInvokedArray  = nil;
         initialized = YES;
     }
     
+    NSString *address = [NSString stringWithFormat:@"%p",self];
+    
+    id associatedObj = objc_getAssociatedObject(self, &associatedObjectKey);
+    if (!associatedObj) {
+        ObserverWatcher *watcher = [ObserverWatcher new];
+        watcher.hostAddress = address;
+        objc_setAssociatedObject(self, &associatedObjectKey, watcher, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    
     NSMutableArray *blocks = [globalMap objectForKey:key];
     if (!blocks) {
         blocks = [NSMutableArray array];
     }
     
     BlockInfo *info = [BlockInfo initBlockInfoUsingKey:key block:block option:option];
-    
+    info.address = address;
     [blocks addObject:info];
     
     [globalMap setObject:blocks forKey:key];
