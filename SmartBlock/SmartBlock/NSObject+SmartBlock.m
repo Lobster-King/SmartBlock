@@ -170,6 +170,13 @@ static NSMutableArray *destructionInvokedArray  = nil;
 - (void)callBackUsingKey:(NSString *)key,...NS_REQUIRES_NIL_TERMINATION {
     NSParameterAssert(key);
     
+    NSMutableArray *blocks = [globalMap objectForKey:key];
+    
+    if (!blocks.count) {
+        NSLog(@"未找到与Key:%@匹配的回调!!!",key);
+        return;
+    }
+    
     va_list args;
     va_start(args, key);
     [self invokeMsgWithKey:key arguments:args];

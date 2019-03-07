@@ -25,7 +25,7 @@
     view.center = self.center;
     [self addSubview:view];
     
-    [self observeCallBackUsingKey:@"touchCallBack" callBack:^(){
+    [self observeCallBackUsingKey:@"BaseViewCallBack" callBack:^(){
         
     }];
 }

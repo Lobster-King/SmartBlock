@@ -28,6 +28,8 @@
     [self.baseView removeFromSuperview];
     self.baseView = nil;
     
+    [self callBackUsingKey:@"BaseViewCallBack", nil];
+    
     NSString *address = [NSString stringWithFormat:@"%p",self.baseView];
     NSString *retrievedObject;
     sscanf([address cStringUsingEncoding:NSUTF8StringEncoding], "%p", &retrievedObject);
