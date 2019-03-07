@@ -59,7 +59,6 @@ __weak typeof(self)weakSelf = self;
 
 ## TODO List:
 * 多线程安全问题。
-* 宿主对象清理策略。
 * 性能优化。
 
 ## Have a problem?
