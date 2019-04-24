@@ -130,6 +130,7 @@ static NSMutableArray *destructionInvokedArray  = nil;
         initialized = YES;
     }
     
+#warning fix me!!!可能存在通过内存地址访问对象，可能会因对象释放而出现bad_access导致程序直接挂掉，目前只是内存地址比对，没有访问内存指针，所以暂时不会存在问题。
     NSString *address = [NSString stringWithFormat:@"%p",self];
     
     id associatedObj = objc_getAssociatedObject(self, &kAssociatedObjectKey);
