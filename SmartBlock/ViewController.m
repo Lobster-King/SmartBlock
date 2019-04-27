@@ -25,25 +25,19 @@
     self.baseView.center = self.view.center;
     [self.view addSubview:self.baseView];
     
-    [self.baseView removeFromSuperview];
-    self.baseView = nil;
-    
-    [self callBackUsingKey:@"BaseViewCallBack", nil];
-    
     NSString *address = [NSString stringWithFormat:@"%p",self.baseView];
     NSString *retrievedObject;
     sscanf([address cStringUsingEncoding:NSUTF8StringEncoding], "%p", &retrievedObject);
     
     
-//    __weak typeof(self)weakSelf = self;
-//    [self observeCallBackUsingKey:@"touchCallBack" callBack:^(NSString *msg) {
-//        NSLog(@"%s",__func__);
-//        weakSelf.view.backgroundColor = [UIColor orangeColor];
-//    } destructionOption:BlockDestructionDefault];
+    __weak typeof(self)weakSelf = self;
+    [self observeCallBackUsingKey:@"touchCallBack" callBack:^(NSString *msg,NSString *second) {
+        NSLog(@"%s",__func__);
+        weakSelf.view.backgroundColor = [UIColor orangeColor];
+    } destructionOption:BlockDestructionDefault];
 //
-    [NSThread detachNewThreadSelector:@selector(addObserver) toTarget:self withObject:nil];
-    NSLog(@"子线程中注册Block");
-    // Do any additional setup after loading the view, typically from a nib.
+//    [NSThread detachNewThreadSelector:@selector(addObserver) toTarget:self withObject:nil];
+//    NSLog(@"子线程中注册Block");
     
 }
 

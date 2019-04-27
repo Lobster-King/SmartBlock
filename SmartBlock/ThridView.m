@@ -40,7 +40,7 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     /*改变controller view的背景色，跨多个view回调*/
-    [self callBackUsingKey:@"touchCallBack",@"msg",nil];
+    [self callBackUsingKey:@"touchCallBack",@"msg1",@"msg2",nil];
 }
 
 @end

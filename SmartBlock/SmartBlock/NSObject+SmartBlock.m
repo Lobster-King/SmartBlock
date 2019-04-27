@@ -222,74 +222,21 @@ static NSMutableArray *destructionInvokedArray  = nil;
     NSMethodSignature *blockSignature = [NSMethodSignature signatureWithObjCTypes:__BlockSignature__(block)];
     
     if (argumentsRef.count != ([blockSignature numberOfArguments] - 1)) {
-        //        NSAssert(0, @"参数个数不符！");
         /*参数个数不符合，直接丢弃本次block调用*/
         NSLog(@"Smart_Block_参数个数不符！");
         return;
     }
-    /*
-     1.不做参数具体类型校验
-     2.上层业务负责类型校验
-     */
-    switch (argumentsRef.count) {
-        case 0:
-        {
-            void (^blockRef)(void) = block;
-            blockRef();
-        }
-            break;
-        case 1:
-        {
-            void (^blockRef)(id) = block;
-            blockRef(args[0]);
-        }
-            break;
-        case 2:
-        {
-            void (^blockRef)(id,id) = block;
-            blockRef(args[0],args[1]);
-        }
-            break;
-        case 3:
-        {
-            void (^blockRef)(id,id,id) = block;
-            blockRef(args[0],args[1],args[2]);
-        }
-            break;
-        case 4:
-        {
-            void (^blockRef)(id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3]);
-        }
-            break;
-        case 5:
-        {
-            void (^blockRef)(id,id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3],args[4]);
-        }
-            break;
-        case 6:
-        {
-            void (^blockRef)(id,id,id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3],args[4],args[5]);
-        }
-            break;
-        case 7:
-        {
-            void (^blockRef)(id,id,id,id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3],args[4],args[5],args[6]);
-        }
-            break;
-        case 8:
-        {
-            void (^blockRef)(id,id,id,id,id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
-        }
-            break;
-            
-        default:
-            break;
+    
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:blockSignature];
+    NSInteger index = 1;
+    for (id arg in args) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types-discards-qualifiers"
+        [invocation setArgument:&arg atIndex:index];
+#pragma clang diagnostic pop
+        index++;
     }
+    [invocation invokeWithTarget:block];
 }
 
 - (void)invokeBlockOnObserverThreadWithInfo:(BlockInfo *)blockInfo {
@@ -298,74 +245,22 @@ static NSMutableArray *destructionInvokedArray  = nil;
     NSMethodSignature *blockSignature = [NSMethodSignature signatureWithObjCTypes:__BlockSignature__(block)];
     
     if (argumentsRef.count != ([blockSignature numberOfArguments] - 1)) {
-        //        NSAssert(0, @"参数个数不符！");
         /*参数个数不符合，直接丢弃本次block调用*/
         NSLog(@"Smart_Block_参数个数不符！");
         return;
     }
-    /*
-     1.不做参数具体类型校验
-     2.上层业务负责类型校验
-     */
-    switch (argumentsRef.count) {
-        case 0:
-        {
-            void (^blockRef)(void) = block;
-            blockRef();
-        }
-            break;
-        case 1:
-        {
-            void (^blockRef)(id) = block;
-            blockRef(args[0]);
-        }
-            break;
-        case 2:
-        {
-            void (^blockRef)(id,id) = block;
-            blockRef(args[0],args[1]);
-        }
-            break;
-        case 3:
-        {
-            void (^blockRef)(id,id,id) = block;
-            blockRef(args[0],args[1],args[2]);
-        }
-            break;
-        case 4:
-        {
-            void (^blockRef)(id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3]);
-        }
-            break;
-        case 5:
-        {
-            void (^blockRef)(id,id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3],args[4]);
-        }
-            break;
-        case 6:
-        {
-            void (^blockRef)(id,id,id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3],args[4],args[5]);
-        }
-            break;
-        case 7:
-        {
-            void (^blockRef)(id,id,id,id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3],args[4],args[5],args[6]);
-        }
-            break;
-        case 8:
-        {
-            void (^blockRef)(id,id,id,id,id,id,id,id) = block;
-            blockRef(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
-        }
-            break;
-            
-        default:
-            break;
+    
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:blockSignature];
+    NSInteger index = 1;
+    for (id arg in args) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wincompatible-pointer-types-discards-qualifiers"
+        [invocation setArgument:&arg atIndex:index];
+#pragma clang diagnostic pop
+        index++;
     }
+    [invocation invokeWithTarget:block];
+    
     blockInfo.finished = YES;
 }
 
